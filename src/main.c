@@ -32,6 +32,8 @@ int main() {
 
     printf("Starte Mandelbrot Berechnung...\n");
 
+    double start_time = omp_get_wtime();
+
     // 2. Die parallele Schleife mit OpenMP [cite: 5, 6]
     // 'schedule(dynamic)' ist hier extrem wichtig, da manche Pixel nach 2 Iterationen abbrechen, 
     // andere aber die vollen 1000 brauchen. So werden die CPU-Kerne gleichmäßig ausgelastet.
@@ -83,8 +85,18 @@ int main() {
         }
     }
 
-    printf("Berechnung fertig! Speichere Bild...\n");
+    double end_time = omp_get_wtime();
+    double time_spent = end_time - start_time;
 
+    printf("Berechnung fertig!\n\n");
+    
+    // Ausgabe der Metrik (Human readable)
+    printf("--------------------------------------------------\n");
+    printf(" BENÖTIGTE RECHENZEIT: %.4f Sekunden\n", time_spent);
+    printf("--------------------------------------------------\n\n");
+
+
+    printf("Speichere Bild...\n");
     // 4. Bild auf die Festplatte schreiben [cite: 46]
     stbi_write_png("mandelbrot_parallel.png", w, h, 3, image, w * 3);
 
