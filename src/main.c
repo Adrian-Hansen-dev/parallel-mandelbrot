@@ -10,32 +10,40 @@
 
 
 int main(int argc, char *argv[]){
-    int w = 2048; 
-    int h = 2048; 
-
-    if (argc == 3) {
-        w = atoi(argv[1]);
-        h = atoi(argv[2]);
-    } else if (argc > 1) {
-        printf("Verwendung: %s <Breite> <Hoehe>\n", argv[0]);
-        printf("Beispiel: %s 1024 1024\n", argv[0]);
-        printf("Starte stattdessen mit Standardwerten (2048x2048)...\n\n");
-    }
-
-    // Sicherheitscheck: Verhindern, dass jemand 0 oder negative Pixel eingibt
-    if (w <= 0 || h <= 0) {
-        printf("Fehler: Breite und Hoehe muessen groesser als 0 sein!\n");
-        return 1;
-    }
-
-
-    int maxIterations = 1000; // Typischer Wert für gute Details [cite: 45]
-
-    // Der Standard-Viewport (Sichtfenster) aus dem Dokument [cite: 42]
+    int w = 2048;
+    int h = 2048;
+    int maxIterations = 1000;
     float min_x = -2.0f;
     float min_y = -1.0f;
     float max_x = 1.0f;
     float max_y = 1.0f;
+
+    if (argc == 3) {
+        w = atoi(argv[1]);
+        h = atoi(argv[2]);
+    } else if (argc == 4) {
+        w = atoi(argv[1]);
+        h = atoi(argv[2]);
+        maxIterations = atoi(argv[3]);
+    } else if (argc == 8) {
+        w = atoi(argv[1]);
+        h = atoi(argv[2]);
+        maxIterations = atoi(argv[3]);
+        min_x = atof(argv[4]);
+        min_y = atof(argv[5]);
+        max_x = atof(argv[6]);
+        max_y = atof(argv[7]);
+    } else if (argc > 1) {
+        printf("Verwendung: %s <Breite> <Hoehe> [maxIterations] [min_x min_y max_x max_y]\n", argv[0]);
+        printf("Beispiel: %s 1024 1024 500 -2.0 -1.0 1.0 1.0\n", argv[0]);
+        printf("Starte stattdessen mit Standardwerten...\n\n");
+    }
+
+    // Sicherheitscheck
+    if (w <= 0 || h <= 0) {
+        printf("Fehler: Breite und Hoehe muessen groesser als 0 sein!\n");
+        return 1;
+    }
 
     // Speicher für das Bild reservieren (Breite * Höhe * 3 Farbkanäle für RGB)
     // Das Array liegt flach im Speicher, wir berechnen den Index für jedes Pixel manuell.
@@ -45,6 +53,8 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
+    printf("Einstellungen: %dx%d, maxIter=%d, Viewport=(%.2f, %.2f, %.2f, %.2f)\n",
+           w, h, maxIterations, min_x, min_y, max_x, max_y);
     printf("Starte Mandelbrot Berechnung...\n");
 
     double start_time = omp_get_wtime();
