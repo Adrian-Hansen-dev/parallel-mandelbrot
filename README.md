@@ -44,9 +44,19 @@ gcc src/main.c -o mandelbrot -fopenmp -O3 -lm
 ./mandelbrot 1024 1024 500
 ```
 
+**Optional: Set thread count (for benchmarking)**
+```bash
+./mandelbrot 1024 1024 500 4
+```
+
 **Optional: Full control with viewport (min_x, min_y, max_x, max_y)**
 ```bash
 ./mandelbrot 1024 1024 500 -2.0 -1.0 1.0 1.0
+```
+
+**Optional: Full control with viewport and thread count**
+```bash
+./mandelbrot 1024 1024 500 -2.0 -1.0 1.0 1.0 4
 ```
 
 Check your project folder—you should see a newly generated `mandelbrot_parallel.png` file!

@@ -13,6 +13,7 @@ int main(int argc, char *argv[]){
     int w = 2048;
     int h = 2048;
     int maxIterations = 1000;
+    int threads = 0; // 0 = let OpenMP decide
     float min_x = -2.0f;
     float min_y = -1.0f;
     float max_x = 1.0f;
@@ -25,6 +26,11 @@ int main(int argc, char *argv[]){
         w = atoi(argv[1]);
         h = atoi(argv[2]);
         maxIterations = atoi(argv[3]);
+    } else if (argc == 5) {
+        w = atoi(argv[1]);
+        h = atoi(argv[2]);
+        maxIterations = atoi(argv[3]);
+        threads = atoi(argv[4]);
     } else if (argc == 8) {
         w = atoi(argv[1]);
         h = atoi(argv[2]);
@@ -33,10 +39,24 @@ int main(int argc, char *argv[]){
         min_y = atof(argv[5]);
         max_x = atof(argv[6]);
         max_y = atof(argv[7]);
+    } else if (argc == 9) {
+        w = atoi(argv[1]);
+        h = atoi(argv[2]);
+        maxIterations = atoi(argv[3]);
+        min_x = atof(argv[4]);
+        min_y = atof(argv[5]);
+        max_x = atof(argv[6]);
+        max_y = atof(argv[7]);
+        threads = atoi(argv[8]);
     } else if (argc > 1) {
-        printf("Verwendung: %s <Breite> <Hoehe> [maxIterations] [min_x min_y max_x max_y]\n", argv[0]);
-        printf("Beispiel: %s 1024 1024 500 -2.0 -1.0 1.0 1.0\n", argv[0]);
+        printf("Verwendung: %s <Breite> <Hoehe> [maxIterations] [threads] [min_x min_y max_x max_y] [threads]\n", argv[0]);
+        printf("Beispiel: %s 1024 1024 500 4\n", argv[0]);
         printf("Starte stattdessen mit Standardwerten...\n\n");
+    }
+
+    // Thread-Anzahl setzen falls angegeben
+    if (threads > 0) {
+        omp_set_num_threads(threads);
     }
 
     // Sicherheitscheck
@@ -53,8 +73,8 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    printf("Einstellungen: %dx%d, maxIter=%d, Viewport=(%.2f, %.2f, %.2f, %.2f)\n",
-           w, h, maxIterations, min_x, min_y, max_x, max_y);
+    printf("Einstellungen: %dx%d, maxIter=%d, Threads=%d, Viewport=(%.2f, %.2f, %.2f, %.2f)\n",
+           w, h, maxIterations, omp_get_max_threads(), min_x, min_y, max_x, max_y);
     printf("Starte Mandelbrot Berechnung...\n");
 
     double start_time = omp_get_wtime();
