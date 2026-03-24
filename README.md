@@ -33,10 +33,20 @@ gcc src/main.c -o mandelbrot -fopenmp -O3 -lm
 ```bash
 ./mandelbrot
 ```
-**Optional: Run the program with dynamic height and width**
+
+**Optional: Custom width and height**
 ```bash
-./mandelbrot [height] [width]
+./mandelbrot 1024 1024
 ```
 
+**Optional: Custom width, height and max iterations**
+```bash
+./mandelbrot 1024 1024 500
+```
+
+**Optional: Full control with viewport (min_x, min_y, max_x, max_y)**
+```bash
+./mandelbrot 1024 1024 500 -2.0 -1.0 1.0 1.0
+```
 
 Check your project folder—you should see a newly generated `mandelbrot_parallel.png` file!
