@@ -60,3 +60,19 @@ gcc src/main.c -o mandelbrot -fopenmp -O3 -lm
 ```
 
 Check your project folder—you should see a newly generated `mandelbrot_parallel.png` file!
+
+## Benchmarking
+
+To run the benchmark and generate a speedup graph:
+
+**1. Install dependencies:**
+```bash
+sudo apt-get update && sudo apt-get install -y python3-pip python3-matplotlib
+```
+
+**2. Run the benchmark:**
+```bash
+python3 benchmark.py
+```
+
+This runs the Mandelbrot computation with 1, 2, 4, and 8 threads, measures the time, and saves a speedup graph as `speedup_graph.png`.
