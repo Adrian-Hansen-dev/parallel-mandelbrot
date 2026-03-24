@@ -26,12 +26,17 @@ Once the container is running, open a new terminal inside VS Code (`Ctrl + ~` or
 
 **1. Compile the code:**
 ```bash
-gcc src/main.c -o my_app -fopenmp -lm
+gcc src/main.c -o mandelbrot -fopenmp -O3 -lm
 ```
 
 **2. Run the program:**
 ```bash
-./my_app
+./mandelbrot
+```
+**Optional: Run the program with dynamic height and width**
+```bash
+./mandelbrot [height] [width]
 ```
 
-Check your project folder—you should see a newly generated `output.png` file!
+
+Check your project folder—you should see a newly generated `mandelbrot_parallel.png` file!

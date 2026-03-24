@@ -9,11 +9,26 @@
 #include "../include/stb_image_write.h"
 
 
-int main() {
-    // 1. Inputs und Parameter definieren [cite: 38]
-    // Wir nutzen hier direkt die 2048x2048 Auflösung, die du für das Benchmarking in deinem Bericht brauchst[cite: 54].
-    int w = 4048; 
-    int h = 4048; 
+int main(int argc, char *argv[]){
+    int w = 2048; 
+    int h = 2048; 
+
+    if (argc == 3) {
+        w = atoi(argv[1]);
+        h = atoi(argv[2]);
+    } else if (argc > 1) {
+        printf("Verwendung: %s <Breite> <Hoehe>\n", argv[0]);
+        printf("Beispiel: %s 1024 1024\n", argv[0]);
+        printf("Starte stattdessen mit Standardwerten (2048x2048)...\n\n");
+    }
+
+    // Sicherheitscheck: Verhindern, dass jemand 0 oder negative Pixel eingibt
+    if (w <= 0 || h <= 0) {
+        printf("Fehler: Breite und Hoehe muessen groesser als 0 sein!\n");
+        return 1;
+    }
+
+
     int maxIterations = 1000; // Typischer Wert für gute Details [cite: 45]
 
     // Der Standard-Viewport (Sichtfenster) aus dem Dokument [cite: 42]
