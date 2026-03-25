@@ -65,12 +65,6 @@ Check your project folder—you should see a newly generated `mandelbrot_paralle
 
 To run the benchmark and generate a speedup graph:
 
-**1. Install dependencies:**
-```bash
-sudo apt-get update && sudo apt-get install -y python3-pip python3-matplotlib
-```
-
-**2. Run the benchmark:**
 ```bash
 python3 benchmark.py
 ```
