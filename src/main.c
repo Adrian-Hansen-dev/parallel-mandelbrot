@@ -54,19 +54,17 @@ int main(int argc, char *argv[]){
         printf("Starte stattdessen mit Standardwerten...\n\n");
     }
 
-    // Thread-Anzahl setzen falls angegeben
     if (threads > 0) {
         omp_set_num_threads(threads);
     }
 
-    // Sicherheitscheck
     if (w <= 0 || h <= 0) {
         printf("Fehler: Breite und Hoehe muessen groesser als 0 sein!\n");
         return 1;
     }
 
-    // Bild-Array anlegen (RGB = 3 Bytes pro Pixel)
-    unsigned char *image = (unsigned char *)malloc(w * h * 3);
+
+    unsigned char *image = (unsigned char *)malloc(w * h * 3); // 3 = RGB
     if (image == NULL) {
         printf("Fehler: Nicht genug Speicher!\n");
         return 1;
@@ -78,8 +76,7 @@ int main(int argc, char *argv[]){
 
     double start_time = omp_get_wtime();
 
-    // Parallele Berechnung - dynamic weil manche Pixel viel mehr Iterationen brauchen als andere
-    #pragma omp parallel for schedule(dynamic)
+    #pragma omp parallel for schedule(dynamic) // -> dynamic weil manche Pixel viel mehr Iterationen brauchen als andere
     for (int py = 0; py < h; py++) {
         for (int px = 0; px < w; px++) {
 
@@ -87,7 +84,6 @@ int main(int argc, char *argv[]){
             float cx = min_x + ((float)px / (w - 1)) * (max_x - min_x);
             float cy = min_y + ((float)py / (h - 1)) * (max_y - min_y);
 
-            // Startwerte setzen
             float zx = cx;
             float zy = cy;
 
@@ -103,12 +99,10 @@ int main(int argc, char *argv[]){
                     break;
                 }
 
-                // Naechste Runde
                 zx = x;
                 zy = y;
             }
 
-            // Farbe setzen
             int pixel_index = (py * w + px) * 3;
 
             if (n == maxIterations) {
@@ -135,12 +129,9 @@ int main(int argc, char *argv[]){
     printf("--------------------------------------------------\n\n");
 
     printf("Speichere Bild...\n");
-    // Bild speichern
     stbi_write_png("mandelbrot_parallel.png", w, h, 3, image, w * 3);
-
-    // Speicher freigeben (Threads sind nach der Schleife schon fertig)
     free(image);
 
-    printf("Erledigt. Bild als 'mandelbrot_parallel.png' gespeichert.\n");
+    printf("Bild als 'mandelbrot_parallel.png' gespeichert.\n");
     return 0;
 }
